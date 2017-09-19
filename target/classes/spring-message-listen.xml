@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="forAsiaS3ProcessTopicInfo" class="com.bestv.message.receive.TopicInfo">
+        <!--设定监听的sqs名-->
+        <constructor-arg name="topicName" value="for-asia-s3-process"/>
+    </bean>
+
+    <bean id="showFileContentListener" class="aws.s3.S3Simple">
+    </bean>
+    <bean id="credential" class="com.bestv.aws.common.Credential">
+        <property name="accessKeyId" value="AKIAORAYWI2F5OCIJKCA"/>
+        <property name="secretKey" value="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"/>
+    </bean>
+
+    <bean class="com.bestv.message.receive.AutoMapMessageListenerRegister">
+        <!--载入证书-->
+        <constructor-arg name="credential" ref="credential"/>
+        <constructor-arg name="callbackThreadPoolSize" value="9"/>
+        <constructor-arg name="serviceCallbackMap">
+            <!--配置监听器-->
+            <map>
+                <entry key-ref="forAsiaS3ProcessTopicInfo" value-ref="showFileContentListener"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+</beans>
