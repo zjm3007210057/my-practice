@@ -29,4 +29,31 @@ public class ArrayUtils {
         return arr;
     }
 
+    /**
+     * 生成近乎排好序的数组，其中非排序的元素为m个
+     * @param n
+     * @param m
+     * @return
+     */
+    public static int[] generateNearSortArray(int n, int m){
+        if(m > n){
+            throw new RuntimeException("unsort number can not biger than array length");
+        }
+        int[] arr = new int[n];
+        for(int i=0; i<n; i++){
+            arr[i] = i;
+        }
+        int tmp;
+        int left;
+        int right;
+        for(int j=0; j<m; j++){
+            left = new Random().nextInt(n);
+            right = new Random().nextInt(n);
+            tmp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = tmp;
+        }
+        return arr;
+    }
+
 }
