@@ -37,7 +37,7 @@ public class ArrayUtils {
      */
     public static int[] generateNearSortArray(int n, int m){
         if(m > n){
-            throw new RuntimeException("unsort number can not biger than array length");
+            throw new RuntimeException("unsort number can not bigger than array length");
         }
         int[] arr = new int[n];
         for(int i=0; i<n; i++){
@@ -54,6 +54,37 @@ public class ArrayUtils {
             arr[right] = tmp;
         }
         return arr;
+    }
+
+    /**
+     * 数组拷贝，返回新拷贝的数组
+     * @param arr
+     * @return
+     */
+    public static int[] copyArr(int[] arr){
+        int[] res = new int[arr.length];
+        for(int i=0; i<arr.length; i++){
+            res[i] = arr[i];
+        }
+        return res;
+    }
+
+    /**
+     * 判断两个数组是否相等，只有当数组的长度相同，且每一个对应元素相等才表示两个数组相等
+     * @param arr1
+     * @param arr2
+     * @return
+     */
+    public static boolean equals(int[] arr1, int[] arr2){
+        if(arr1.length != arr2.length){
+            return false;
+        }
+        for(int i=0; i<arr1.length; i++){
+            if(arr1[i] != arr2[i]){
+                return false;
+            }
+        }
+        return true;
     }
 
 }
