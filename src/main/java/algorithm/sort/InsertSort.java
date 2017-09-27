@@ -23,6 +23,21 @@ public class InsertSort {
     }
 
     /**
+     * 插入排序
+     * @param arr
+     */
+    public static void insertSort(int[] arr, int left, int right){
+        int tmp;
+        for(int i=left + 1; i<=right; i++){
+            for(int j=i; j>left && (arr[j] < arr[j-1]); j--){
+                tmp = arr[j];
+                arr[j] = arr[j-1];
+                arr[j-1] = tmp;
+            }
+        }
+    }
+
+    /**
      * 改进插入排序
      * @param arr
      */
@@ -41,7 +56,9 @@ public class InsertSort {
     }
 
     public static void main(String[] args) {
-            int[] arr = {4,3,2,1};
-            insertSortBetter(arr);
+        int[] arr = {1, 4, 6, 2, 9, 3, 5, 8, 7};
+        insertSort(arr, 3, 7);
+        System.out.println("");
     }
+
 }

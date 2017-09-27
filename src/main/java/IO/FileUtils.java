@@ -97,10 +97,10 @@ public class FileUtils {
         String value;
         String command;
         for(String fileName : list) {
-            if(fileName.contains(" ") || fileName.contains("(")){
+            if(fileName.contains(" ") || fileName.contains("(") || fileName.contains("&")){
                 value = fileName.replaceAll(" ", "").replaceAll("（","").replaceAll("）", "")
-                        .replaceAll("\\(","").replaceAll("\\)", "");
-                fileName = fileName.replaceAll(" ", "\\\\ ").replaceAll("\\(","").replaceAll("\\)", "");
+                        .replaceAll("\\(","").replaceAll("\\)", "").replaceAll("&", "");
+                fileName = fileName.replaceAll(" ", "\\\\ ").replaceAll("\\(","").replaceAll("\\)", "").replaceAll("&", "\\\\&");
                 command = "mv " + fileName + " " + value;
                 res.put(command, value);
             }else {
@@ -212,7 +212,7 @@ public class FileUtils {
 
 
     public static void main(String[] args) throws Exception {
-        generateBashFile("/Users/zjm/Documents/vedio/强力Django和杀手级xadmin", "强力Django和杀手级xadmin", "/Users/zjm/Downloads/强力Django和杀手级xadmin.sh");
+        generateBashFile("/Users/zjm/Documents/vedio/Nginx从入门到实践", "Nginx从入门到实践", "/Users/zjm/Downloads/Nginx从入门到实践.sh");
 //        getMap("/Users/zjm/Downloads/python分布式爬虫list.txt", "/Users/zjm/Downloads/python分布式爬虫list1.txt");
        /* try {
             FileUtils.listDirectory(new File("/Users/zjm/Documents/vedio/vue-elem-ys/第09章项目实战-ratings评价列表页实现"));
