@@ -149,6 +149,7 @@
             <artifactId>apollo-core</artifactId>
             <version>20170728.1.0.0</version>
         </dependency>
+
     </dependencies>
 
 </project>

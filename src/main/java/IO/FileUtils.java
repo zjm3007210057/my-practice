@@ -46,6 +46,7 @@ public class FileUtils {
                     key = file.toString();
                     if (key.endsWith("avi") || key.endsWith("mp4") || key.endsWith("wmv") || key.endsWith("mov")) {
                         list.add(key);
+                        System.out.println(key);
                     }
                 }
             }
@@ -97,7 +98,7 @@ public class FileUtils {
         String value;
         String command;
         for(String fileName : list) {
-            if(fileName.contains(" ") || fileName.contains("(") || fileName.contains("&")){
+            if(fileName.contains(" ") || fileName.contains("(") || fileName.contains("&") || fileName.contains(")")){
                 value = fileName.replaceAll(" ", "").replaceAll("（","").replaceAll("）", "")
                         .replaceAll("\\(","").replaceAll("\\)", "").replaceAll("&", "");
                 fileName = fileName.replaceAll(" ", "\\\\ ").replaceAll("\\(","").replaceAll("\\)", "").replaceAll("&", "\\\\&");
@@ -114,7 +115,7 @@ public class FileUtils {
     /**
      * 生成压缩视频命令
      * @param map
-     * @return
+     * @return。
      */
     public static List<String> generateCompileCommand(Map<String, String> map){
         List<String> res = new ArrayList<>(map.size());
@@ -138,6 +139,7 @@ public class FileUtils {
         String value;
         for(String fileName : list){
             key = fileName;
+            fileName = fileName.replaceAll(" ", "\\\\ ");
             value = fileName.replaceAll(fileTile, fileTile + "-ys");
             value = value.replaceAll("（", "").replaceAll("）", "");
             map.put(key, value);
@@ -212,7 +214,9 @@ public class FileUtils {
 
 
     public static void main(String[] args) throws Exception {
-        generateBashFile("/Users/zjm/Documents/vedio/Nginx从入门到实践", "Nginx从入门到实践", "/Users/zjm/Downloads/Nginx从入门到实践.sh");
+//        listDirectory(new File("/Users/zjm/Documents/vedio/前端小白入门/前端小白入门1"));
+//        listDirectory(new File("/Users/zjm/Documents/vedio/前端小白入门/前端小白入门2"));
+        generateBashFile("/Users/zjm/Documents/vedio/前端小白入门", "前端小白入门", "/Users/zjm/Downloads/前端小白入门.sh");
 //        getMap("/Users/zjm/Downloads/python分布式爬虫list.txt", "/Users/zjm/Downloads/python分布式爬虫list1.txt");
        /* try {
             FileUtils.listDirectory(new File("/Users/zjm/Documents/vedio/vue-elem-ys/第09章项目实战-ratings评价列表页实现"));
