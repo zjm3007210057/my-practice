@@ -1,0 +1,20 @@
+#忽略target
+target
+#忽略test目录
+test
+# 忽略*.o和*.a文件
+*.[oa]
+#忽略yml，ymal文件
+*.yml
+*.ymal
+#忽略.iml文件
+*.iml
+#忽略.properties文件
+#application.properties
+#忽略gitignore文件
+#忽略.idea目录
+.idea
+#忽略.git目录
+.git
+logs
+*.jpg
