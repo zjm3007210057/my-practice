@@ -1,5 +1,7 @@
 package algorithm.tree;
 
+import java.util.Random;
+
 /**
  * 二叉树
  * Created by zjm on 10/11/2017.
@@ -45,33 +47,46 @@ public class BinaryTree {
     //添加元素
     public void addItem(int item) {
         if (root == null) {
-            root = new Node();
-            root.setValue(item);
-            root.setLeftNode(null);
-            root.setRightNode(null);
+            assembleNode(null, item);
             count++;
             return;
         }
         Node tmp = root;
         while (tmp != null) {
             if (tmp.getLeftNode() == null) {
-                Node node = assembleNode(item);
+                Node node = assembleNode(tmp, item);
                 tmp.setLeftNode(node);
             } else if (tmp.getParentNode() == null) {
-                Node node = assembleNode(item);
+                Node node = assembleNode(tmp, item);
                 tmp.setLeftNode(node);
             }
-            tmp = tmp.getLeftNode();
+            //随机选择左右子树
+            if(new Random().nextBoolean()){
+                tmp = tmp.getLeftNode();
+            }else {
+                tmp = tmp.getRightNode();
+            }
         }
         count++;
     }
 
+    //获取根节点
+    public Node getRoot() {
+        return root;
+    }
+
+    //获取元素的个数
+    public int getCount() {
+        return count;
+    }
+
     //组装Node节点
-    private Node assembleNode(int item) {
+    protected Node assembleNode(Node parentNode, int item) {
         Node node = new Node();
         node.setLeftNode(null);
         node.setRightNode(null);
         node.setValue(item);
+        node.setParentNode(parentNode);
         return node;
     }
 }
