@@ -34,20 +34,6 @@ public class LinkedQueue<T> implements Queue<T>{
     }
 
     /**
-     * 组装节点
-     * @param pre 前一个节点
-     * @param date 数据元素
-     * @return node 新增的节点
-     */
-    private Node assembleNode(Node pre, T date){
-        Node node = new Node();
-        node.setPre(pre);
-        node.setDate(date);
-        node.setNext(null);
-        return node;
-    }
-
-    /**
      * @see Queue#getSize()
      * @return
      */
@@ -60,13 +46,7 @@ public class LinkedQueue<T> implements Queue<T>{
      * @param data 数据
      */
     public void enQueue(T data) {
-        if(head == null){
-            assembleNode(head, data);
-            size++;
-            lastPoint = head;
-            return;
-        }
-        lastPoint = assembleNode(lastPoint, data);
+        lastPoint = NodeAssemble.assembleNode(lastPoint, data);
         size++;
     }
 

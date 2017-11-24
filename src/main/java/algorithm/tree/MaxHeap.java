@@ -46,6 +46,10 @@ public class MaxHeap {
         shiftUp(o);
     }
 
+    /**
+     * 获取元素
+     * @return
+     */
     public Object getItem(){
         if(count == 0){
             return null;
@@ -146,6 +150,10 @@ public class MaxHeap {
 
     }
 
+    /**
+     * 测试主函数
+     * @param args
+     */
     public static void main(String[] args) {
         MaxHeap heap = new MaxHeap(10);
         for(int i=1; i<11; i++){
