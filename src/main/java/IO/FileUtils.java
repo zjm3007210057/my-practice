@@ -1,8 +1,11 @@
 package IO;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections.MapUtils;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +58,27 @@ public class FileUtils {
     }
 
     /**
-     * 创建多级目录
+     * 原视频目录中包含空格等特殊字符，需要先将这些特殊字符去掉（即要先创建去掉特殊字符的目录，然后把原视频移到该目录下，再删除原来的目录）
+     * @param list
+     * @return
+     */
+    private static Map<String, String> mkdirCommand(List<String> list){
+        Map<String, String> res = new HashMap<>(list.size());
+        String filePath;
+        String command;
+        String mvCommand;
+        for(String path : list){
+            if(path.contains(" ") || path.contains("(") || path.contains(")")){
+                filePath = path.substring(0, path.lastIndexOf("/")).replaceAll(" ", "").replaceAll("\\(", "").replaceAll("\\)", "");
+                command = "mkdir -p " + filePath;
+                res.put(command, command);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 创建多级目录,给压缩视频使用
      * @param map
      * @throws Exception
      */
@@ -97,16 +120,24 @@ public class FileUtils {
         Map<String, String> res = new HashMap<>(list.size());
         String value;
         String command;
+        String rmCommand;
+        String tmp;
         for(String fileName : list) {
+            tmp = fileName.substring(0, fileName.lastIndexOf("/"));
+            if(tmp.contains(" ") || tmp.contains("(") || tmp.contains(")")){
+                tmp = fileName.substring(0, fileName.lastIndexOf("/")).replaceAll(" ", "\\\\ ").replaceAll("\\(","\\\\(").replaceAll("\\)", "\\\\)").replaceAll("&", "\\\\&");
+                rmCommand = "rm -r " + tmp;
+                res.put(rmCommand, tmp);
+            }
             if(fileName.contains(" ") || fileName.contains("(") || fileName.contains("&") || fileName.contains(")")){
                 value = fileName.replaceAll(" ", "").replaceAll("（","").replaceAll("）", "")
-                        .replaceAll("\\(","").replaceAll("\\)", "").replaceAll("&", "");
-                fileName = fileName.replaceAll(" ", "\\\\ ").replaceAll("\\(","").replaceAll("\\)", "").replaceAll("&", "\\\\&");
+                        .replaceAll("\\(","").replaceAll("\\)", "").replaceAll("&", "").replaceAll(";", "");
+                fileName = fileName.replaceAll(" ", "\\\\ ").replaceAll("\\(","\\\\(").replaceAll("\\)", "\\\\)").replaceAll("&", "\\\\&").replaceAll(";", "\\\\;");
                 command = "mv " + fileName + " " + value;
                 res.put(command, value);
             }else {
                 value = fileName.replaceAll("（","").replaceAll("）", "");
-                res.put(value, value);
+                res.put(fileName, value);
             }
         }
         return res;
@@ -121,7 +152,7 @@ public class FileUtils {
         List<String> res = new ArrayList<>(map.size());
         String command;
         for(Map.Entry<String, String> entry : map.entrySet()){
-            command = "ffmpeg -i " + entry.getKey() + " -vcodec libx264 -preset fast -crf 28 -y -acodec libmp3lame -ab 32k " + entry.getValue();
+            command = "ffmpeg -i " + entry.getKey() + " -vcodec libx264 -preset fast -crf 28 -y -acodec libmp3lame -ab 30k " + entry.getValue();
             res.add(command);
         }
         return res;
@@ -148,6 +179,20 @@ public class FileUtils {
     }
 
     /**
+     * 去除文件目录中的空格等特殊字符
+     * @param list
+     * @return
+     */
+    public static List<String> rmFilePathSpace(List<String> list){
+        List<String> res = new ArrayList<>(list.size());
+        for(String path : list){
+            path = path.replaceAll(" ", "").replaceAll("\\(", "").replaceAll("\\)", "");
+            res.add(path);
+        }
+        return res;
+    }
+
+    /**
      * <p>生成最后可执行的文件,其中命令包括：</p>
      * <ul>
      *     <ui>将文件重新命名，去除空格和英文括号特殊字符</ui>
@@ -168,7 +213,16 @@ public class FileUtils {
             bw = new BufferedWriter(new FileWriter(file));
             //获取最开始目录下的文件list
             List<String> firstFileList = listDirectory(sourceFile);
+            //生成原始文件创建文件目录命令
+            Map<String, String> sourceFileMVCommand = mkdirCommand(firstFileList);
+            if(MapUtils.isNotEmpty(sourceFileMVCommand)){
+                for(Map.Entry<String, String> cmd : sourceFileMVCommand.entrySet()){
+                    bw.write(cmd.getKey() + "\n");
+                }
+            }
+            bw.flush();
             Map<String, String> fileMvMap = generateMVCommand(firstFileList);//生成移动文件命令，将有空格和括号的文件移到符合规范的文件
+
             //将文件移动命令写入文件
             firstFileList = new ArrayList<>(fileMvMap.size());
             for(Map.Entry<String, String> entry : fileMvMap.entrySet()){
@@ -177,9 +231,16 @@ public class FileUtils {
                 }
                 firstFileList.add(entry.getValue());
             }
+            for(Map.Entry<String, String> entry : fileMvMap.entrySet()){
+                if(entry.getKey().startsWith("rm")){
+                    bw.write(entry.getKey() + "\n");
+                }
+                firstFileList.add(entry.getValue());
+            }
             bw.flush();
+
             //再次获取经过文件名更改后的filePath里面文件名
-//            firstFileList = listDirectory(sourceFile);
+            firstFileList = listDirectory(sourceFile);
             //生成需要创建的目录map
             Map<String, String> createDirMap = generateDirectory(firstFileList, fileTitle);
             //生成创建目录命令的list
@@ -190,6 +251,7 @@ public class FileUtils {
             }
             bw.flush();
             //生成压缩视频的map
+            firstFileList = rmFilePathSpace(listDirectory(sourceFile));
             Map<String, String> videoMap = getVideoMap(firstFileList, fileTitle);
             //生成压缩视频命令list
             List<String> compressList = generateCompileCommand(videoMap);
@@ -216,7 +278,7 @@ public class FileUtils {
     public static void main(String[] args) throws Exception {
 //        listDirectory(new File("/Users/zjm/Documents/vedio/前端小白入门/前端小白入门1"));
 //        listDirectory(new File("/Users/zjm/Documents/vedio/前端小白入门/前端小白入门2"));
-        generateBashFile("/Users/zjm/Documents/vedio/Java开发企业级权限管理系统", "Java开发企业级权限管理系统", "/Users/zjm/Downloads/Java开发企业级权限管理系统.sh");
+        generateBashFile("/Users/zjm/Documents/vedio/快速上手Linux玩转典型应用", "快速上手Linux玩转典型应用", "/Users/zjm/Downloads/快速上手Linux玩转典型应用.sh");
 //        getMap("/Users/zjm/Downloads/python分布式爬虫list.txt", "/Users/zjm/Downloads/python分布式爬虫list1.txt");
        /* try {
             FileUtils.listDirectory(new File("/Users/zjm/Documents/vedio/vue-elem-ys/第09章项目实战-ratings评价列表页实现"));

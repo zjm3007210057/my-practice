@@ -51,5 +51,8 @@ public class RafDemo {
         raf.read(buf);
         System.out.println(Arrays.toString(buf));
         raf.close();
+
+        String sss = "a/b/c.txt";
+        System.out.println(sss.substring(0, sss.lastIndexOf("/")));
     }
 }

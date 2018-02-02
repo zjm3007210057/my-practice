@@ -31,10 +31,17 @@ public class ArrayStack<T> implements Stack {
      */
     private int DEFAULT_CAPACITY = 8;
 
+    /**
+     * 无参构造函数
+     */
     public ArrayStack() {
         new ArrayStack(DEFAULT_CAPACITY);
     }
 
+    /**
+     * 构造函数
+     * @param capacity 栈的容量
+     */
     public ArrayStack(int capacity) {
         if(capacity < 0){
             throw new RuntimeException("队列的元素不能为负值!");
@@ -105,4 +112,5 @@ public class ArrayStack<T> implements Stack {
         }
         return (T)datas[lastIndex - 1];
     }
+
 }

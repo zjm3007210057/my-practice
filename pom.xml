@@ -149,6 +149,29 @@
             <artifactId>apollo-core</artifactId>
             <version>20170728.1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>4.3.10.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.opg.dahan</groupId>
+            <artifactId>dahan-sms</artifactId>
+            <version>20171013.1.0.0</version>
+        </dependency>
 
     </dependencies>
 
