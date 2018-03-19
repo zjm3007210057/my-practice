@@ -6,10 +6,20 @@ package algorithm.sort;
  */
 public class QuickSort2 {
 
+    /**
+     * quick sort
+     * @param arr
+     */
     public static void quickSort(int[] arr) {
         quickSort(arr, 0, arr.length - 1);
     }
 
+    /**
+     * quick sort
+     * @param arr
+     * @param left start index
+     * @param right end index
+     */
     public static void quickSort(int[] arr, int left, int right) {
         if (right - left < 15) {
             InsertSort.insertSort(arr, left, right);
@@ -19,7 +29,15 @@ public class QuickSort2 {
         quickSort(arr, index + 1, right);
     }
 
-    public static int findIndex(int[] arr, int left, int right) {
+    /**
+     * find index and make all the left elements less than arr[index]
+     * and all the right elements large than arr[index]
+     * @param arr
+     * @param left
+     * @param right
+     * @return
+     */
+    private static int findIndex(int[] arr, int left, int right) {
         int tmp = arr[left];
         int l = left + 1;
         int r = right;

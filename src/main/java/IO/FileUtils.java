@@ -278,7 +278,7 @@ public class FileUtils {
     public static void main(String[] args) throws Exception {
 //        listDirectory(new File("/Users/zjm/Documents/vedio/前端小白入门/前端小白入门1"));
 //        listDirectory(new File("/Users/zjm/Documents/vedio/前端小白入门/前端小白入门2"));
-        generateBashFile("/Users/zjm/Documents/vedio/快速上手Linux玩转典型应用", "快速上手Linux玩转典型应用", "/Users/zjm/Downloads/快速上手Linux玩转典型应用.sh");
+        generateBashFile("/Users/zjm/Documents/vedio/java企业级电商项目架构演进之路Tomcat集群和Redis分布式", "java企业级电商项目架构演进之路Tomcat集群和Redis分布式", "/Users/zjm/Downloads/java企业级电商项目架构演进之路Tomcat集群和Redis分布式.sh");
 //        getMap("/Users/zjm/Downloads/python分布式爬虫list.txt", "/Users/zjm/Downloads/python分布式爬虫list1.txt");
        /* try {
             FileUtils.listDirectory(new File("/Users/zjm/Documents/vedio/vue-elem-ys/第09章项目实战-ratings评价列表页实现"));
