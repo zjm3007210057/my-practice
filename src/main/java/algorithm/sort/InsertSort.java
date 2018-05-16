@@ -7,7 +7,7 @@ package algorithm.sort;
 public class InsertSort {
 
     /**
-     * 插入排序
+     * 对整个数组arr插入排序
      * @param arr
      */
     public static void insertSort(int[] arr){
@@ -23,8 +23,10 @@ public class InsertSort {
     }
 
     /**
-     * 插入排序
+     * 对数组arr的left和right之间的元素进行插入排序，闭区间
      * @param arr
+     * @param left 左边索引
+     * @param right 右边索引
      */
     public static void insertSort(int[] arr, int left, int right){
         int tmp;
@@ -57,7 +59,10 @@ public class InsertSort {
 
     public static void main(String[] args) {
         int[] arr = {1, 4, 6, 2, 9, 3, 5, 8, 7};
-        insertSort(arr, 3, 7);
+        insertSort(arr);
+        for(int i=0; i<arr.length; i++){
+            System.out.print(arr[i] + " ");
+        }
         System.out.println("");
     }
 

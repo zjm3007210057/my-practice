@@ -5,5 +5,6 @@ package other;
  */
 public interface Test {
 
+
     void test();
 }
