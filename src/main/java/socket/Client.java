@@ -1,9 +1,6 @@
 package socket;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -11,11 +8,28 @@ import java.net.Socket;
  */
 public class Client {
 
+    private static final int PORT = 8000;
+
+    private static final int SLEEP = 5000;
+
     public static void main(String[] args) {
-        Socket socket = null;
         try{
-            socket = new Socket("localhost", 8888);
-            //获取输出流,向服务器发送信息
+            final Socket socket = new Socket("localhost", PORT);
+            new Thread(() -> {
+                System.out.println("客户端启动成功");
+                String msg = "hello world \\r\\n";
+                while(true) {
+                    try {
+                        System.out.println("客户端发送数据：" + msg);
+                        socket.getOutputStream().write(msg.getBytes());
+                    } catch (IOException e) {
+                        System.out.println("socket写数据出错");
+                        e.printStackTrace();
+                    }
+                    sleep();
+                }
+            }).start();
+            /*//获取输出流,向服务器发送信息
             OutputStream os = socket.getOutputStream();//字节流
             PrintWriter pw = new PrintWriter(os);
             pw.write("用户名：admin； 密码：123");
@@ -30,8 +44,16 @@ public class Client {
             is.close();
             reader.close();
             pw.close();
-            os.close();
+            os.close();*/
         }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void sleep() {
+        try {
+            Thread.sleep(SLEEP);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

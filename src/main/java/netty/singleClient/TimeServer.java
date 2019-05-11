@@ -1,10 +1,7 @@
 package netty.singleClient;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -36,6 +33,7 @@ public class TimeServer {
 
     }
 
+
     private class MyChildChannelHandler extends ChannelInitializer<SocketChannel> {
 
         @Override
@@ -44,6 +42,23 @@ public class TimeServer {
 
         }
 
+        @Override
+        public void channelActive(ChannelHandlerContext ctx) throws Exception {
+            System.out.println("channelActive");
+            super.channelActive(ctx);
+        }
+
+        @Override
+        public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+            System.out.println("channelInactive");
+            super.channelInactive(ctx);
+        }
+
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+            System.out.println("channelRead");
+            super.channelRead(ctx, msg);
+        }
     }
 
     public static void main(String[] args) throws InterruptedException {
